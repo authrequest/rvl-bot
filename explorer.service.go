@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -9,14 +10,7 @@ import (
 )
 
 func getHashrate() string {
-	// Set
-	req, err := http.NewRequest("GET", "http://explorer.ravencoinlite.org/api/getnetworkhashps", nil)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := http.Get("http://explorer.ravencoinlite.org/api/getnetworkhashps")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -39,14 +33,7 @@ func getHashrate() string {
 }
 
 func getDifficulty() string {
-	// Set
-	req, err := http.NewRequest("GET", "http://explorer.ravencoinlite.org/api/getdifficulty", nil)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := http.Get("http://explorer.ravencoinlite.org/api/getdifficulty")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -60,4 +47,27 @@ func getDifficulty() string {
 
 	difficulty := strings.Trim(string(b), "\"")
 	return difficulty
+}
+
+func getSupply() string {
+	resp, err := http.Get("http://explorer.ravencoinlite.org/ext/getmoneysupply")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	defer resp.Body.Close()
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	s, err := strconv.ParseFloat(strings.Trim(string(b), " "), 32)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	supply := strconv.FormatFloat(s, 'f', 0, 64)
+	fmt.Println(supply)
+	return supply
 }
