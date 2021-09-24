@@ -8,7 +8,7 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
-func sendWebhook(t RVLTicker, hashrate string, difficulty string, supply string) {
+func sendWebhook(t RVLTicker, hashrate string, difficulty string, supply string, addressInfo GetAddress) {
 	webhook, err := disgohook.NewWebhookClientByToken(nil, nil, "750108819337511012/CDCJW-dfOvKx1Yv5QXrEA5Ykg1TxvVQHcVRis--E4TV-9mKGjzZ0VGY-8CHpoKmylp42")
 	if err != nil {
 		panic(err)
@@ -57,6 +57,10 @@ func sendWebhook(t RVLTicker, hashrate string, difficulty string, supply string)
 			}, &api.EmbedField{
 				Name:   "Current Supply",
 				Value:  humanize.Comma(s),
+				Inline: &bool,
+			}, &api.EmbedField{
+				Name:   "Address",
+				Value:  addressInfo.Address,
 				Inline: &bool,
 			}).
 			SetFooter("LayersTech Exchange Go Monitor", "https://ravencoinlite.info/wp-content/uploads/2021/09/RVL-transparent-bg.png").

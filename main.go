@@ -11,7 +11,8 @@ func main() {
 		hashrate := getHashrate()
 		difficulty := getDifficulty()
 		supply := getSupply()
+		addressInfo := getAddress("R9eQvrgLhNkygwfapW3KHxCmvQdYS5wnyJ")
 		t := fetchApi()
-		sendWebhook(t, hashrate, difficulty, supply)
+		sendWebhook(t, hashrate, difficulty, supply, addressInfo)
 	}
 }

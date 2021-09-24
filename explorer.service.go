@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -8,6 +9,17 @@ import (
 	"strconv"
 	"strings"
 )
+
+type GetAddress struct {
+	Address  string  `json:"address"`
+	Sent     int     `json:"sent"`
+	Received float64 `json:"received"`
+	Balance  string  `json:"balance"`
+	LastTxs  []struct {
+		Addresses string `json:"addresses"`
+		Type      string `json:"type"`
+	} `json:"last_txs"`
+}
 
 func getHashrate() string {
 	resp, err := http.Get("http://explorer.ravencoinlite.org/api/getnetworkhashps")
@@ -70,4 +82,22 @@ func getSupply() string {
 	supply := strconv.FormatFloat(s, 'f', 0, 64)
 	fmt.Println(supply)
 	return supply
+}
+
+func getAddress(address string) GetAddress {
+	resp, err := http.Get("https://explorer.ravencoinlite.org/ext/getaddress/" + address)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	defer resp.Body.Close()
+
+	decoder := json.NewDecoder(resp.Body)
+	var info GetAddress
+	err = decoder.Decode(&info)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return info
 }
