@@ -35,14 +35,6 @@ func sendWebhook(t RVLTicker, hashrate string, difficulty string, supply string,
 				Value:  t.Ticker.PriceChangePercent,
 				Inline: &bool,
 			}, &api.EmbedField{
-				Name:   "High",
-				Value:  t.Ticker.High,
-				Inline: &bool,
-			}, &api.EmbedField{
-				Name:   "Low",
-				Value:  t.Ticker.Low,
-				Inline: &bool,
-			}, &api.EmbedField{
 				Name:   "Volume",
 				Value:  t.Ticker.Volume,
 				Inline: &bool,
